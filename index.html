@@ -29,31 +29,40 @@
     <link rel="stylesheet" href="css/style.css">
 
 <style>
-  /* Additional CSS to ensure scrolling works */
+  /* Basic scroll fix without breaking carousel */
   body, html {
-    overflow: auto !important;
     overflow-y: scroll !important;
+    overflow-x: hidden !important;
     height: auto !important;
     -webkit-overflow-scrolling: touch !important;
-    touch-action: pan-y !important;
   }
   
-  /* Allow carousel horizontal drag but not block vertical scroll */
-  .owl-carousel {
-    touch-action: pan-y !important;
-    -webkit-overflow-scrolling: touch !important;
+  body {
+    position: relative !important;
   }
   
-  /* Make sure overlays don't block touches */
-  .overlay {
+  /* Keep carousel working but allow vertical scroll */
+  .home-slider.owl-carousel {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Fix overlay blocking touches */
+  .slider-item .overlay,
+  .ftco-counter .overlay,
+  .ftco-services .overlay {
     pointer-events: none !important;
   }
   
-  /* Ensure slider items don't block scroll */
-  .owl-stage-outer,
-  .owl-stage,
-  .owl-item {
-    touch-action: pan-y !important;
+  /* Ensure carousel nav dots and arrows work */
+  .owl-dots,
+  .owl-nav {
+    pointer-events: auto !important;
+  }
+  
+  .owl-dot,
+  .owl-next,
+  .owl-prev {
+    pointer-events: auto !important;
   }
 </style>
   </head>
@@ -737,93 +746,51 @@
     
   </body>
 
-  <script>
-// Wait for jQuery and Owl Carousel to load
+  <!-- SIMPLE CAROUSEL + SCROLL FIX - Add right before closing </body> tag, AFTER main.js -->
+
+<script>
 jQuery(document).ready(function($) {
   
-  // Destroy and reinitialize all owl carousels with mobile-friendly settings
-  $('.owl-carousel').each(function() {
-    var $carousel = $(this);
-    
-    // Destroy existing carousel if it exists
-    if ($carousel.data('owl.carousel')) {
-      $carousel.trigger('destroy.owl.carousel');
-      $carousel.removeClass('owl-loaded owl-drag');
-    }
-    
-    // Reinitialize with mobile-friendly settings
-    $carousel.owlCarousel({
-      items: 1,
-      loop: true,
-      margin: 0,
-      autoplay: true,
-      autoplayTimeout: 5000,
-      autoplayHoverPause: true,
-      nav: true,
-      dots: true,
-      
-      // CRITICAL: These settings enable mobile scrolling
-      touchDrag: true,        // Enable touch drag
-      mouseDrag: true,        // Enable mouse drag
-      pullDrag: false,        // Disable pull to drag (conflicts with scroll)
-      freeDrag: false,        // Disable free drag
-      
-      // Prevent carousel from blocking page scroll
-      touchClass: 'owl-touch-drag',
-      
-      // Responsive settings
-      responsive: {
-        0: {
-          items: 1,
-          nav: false,
-          dots: true,
-          touchDrag: true,
-          mouseDrag: false  // Disable mouse drag on mobile
-        },
-        600: {
-          items: 1,
-          nav: true,
-          touchDrag: true
-        },
-        1000: {
-          items: 1,
-          nav: true,
-          touchDrag: true
-        }
-      }
-    });
-  });
-  
-  // Force body to remain scrollable
+  // Force scrolling to work
   $('body, html').css({
     'overflow': 'auto',
     'overflow-y': 'scroll',
     'height': 'auto',
-    'touch-action': 'pan-y',
     '-webkit-overflow-scrolling': 'touch'
   });
   
-  // Prevent carousel from capturing vertical swipes
-  var touchStartY = 0;
-  var touchEndY = 0;
+  // Let the carousel work normally, but fix the touch conflict
+  var carouselElement = $('.home-slider');
   
-  $('.owl-carousel').on('touchstart', function(e) {
-    touchStartY = e.touches[0].clientY;
-  });
-  
-  $('.owl-carousel').on('touchmove', function(e) {
-    touchEndY = e.touches[0].clientY;
-    var deltaY = Math.abs(touchEndY - touchStartY);
-    var deltaX = Math.abs(e.touches[0].clientX - touchStartY);
+  if (carouselElement.length) {
+    var startY = 0;
+    var currentY = 0;
+    var isDraggingVertically = false;
     
-    // If vertical swipe is stronger than horizontal, allow page scroll
-    if (deltaY > deltaX && deltaY > 10) {
-      // Don't prevent default - allow page scroll
-      return true;
-    }
-  });
+    carouselElement.on('touchstart', function(e) {
+      startY = e.touches[0].pageY;
+      isDraggingVertically = false;
+    });
+    
+    carouselElement.on('touchmove', function(e) {
+      currentY = e.touches[0].pageY;
+      var deltaY = Math.abs(currentY - startY);
+      var deltaX = Math.abs(e.touches[0].pageX - e.touches[0].pageX);
+      
+      // If user is scrolling vertically (not swiping carousel)
+      if (deltaY > 15) {
+        isDraggingVertically = true;
+        // Stop the carousel from interfering
+        e.stopPropagation();
+      }
+    });
+    
+    carouselElement.on('touchend', function() {
+      isDraggingVertically = false;
+    });
+  }
   
-  // Additional fix: make overlays non-blocking
+  // Make overlays non-blocking for touch events
   $('.overlay').css('pointer-events', 'none');
 });
 </script>
