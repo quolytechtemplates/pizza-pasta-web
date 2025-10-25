@@ -46,55 +46,73 @@
    $.Scrollax();
 
 	var carousel = function() {
-		$('.home-slider').owlCarousel({
-	    loop:true,
-	    autoplay: true,
-	    margin:0,
-	    animateOut: 'fadeOut',
-	    animateIn: 'fadeIn',
-	    nav:false,
-	    autoplayHoverPause: false,
-	    items: 1,
-	    navText : ["<span class='ion-md-arrow-back'></span>","<span class='ion-chevron-right'></span>"],
-	    responsive:{
-	      0:{
-	        items:1,
-	        nav:false
-	      },
-	      600:{
-	        items:1,
-	        nav:false
-	      },
-	      1000:{
-	        items:1,
-	        nav:false
-	      }
-	    }
-		});
-		$('.carousel-work').owlCarousel({
-			autoplay: true,
-			center: true,
-			loop: true,
-			items:1,
-			margin: 30,
-			stagePadding:0,
-			nav: true,
-			navText: ['<span class="ion-ios-arrow-back">', '<span class="ion-ios-arrow-forward">'],
-			responsive:{
-				0:{
-					items: 1,
-					stagePadding: 0
-				},
-				600:{
-					items: 2,
-					stagePadding: 50
-				},
-				1000:{
-					items: 3,
-					stagePadding: 100
-				}
+	$('.home-slider').owlCarousel({
+		loop:true,
+		autoplay: true,
+		margin:0,
+		animateOut: 'fadeOut',
+		animateIn: 'fadeIn',
+		nav:false,
+		autoplayHoverPause: false,
+		items: 1,
+		
+		// ADD THESE CRITICAL MOBILE SETTINGS:
+		touchDrag: true,      // Enable touch dragging
+		mouseDrag: true,      // Enable mouse dragging
+		pullDrag: false,      // Disable pull drag (helps with scroll)
+		freeDrag: false,      // Disable free drag
+		
+		navText : ["<span class='ion-md-arrow-back'></span>","<span class='ion-chevron-right'></span>"],
+		responsive:{
+			0:{
+				items:1,
+				nav:false,
+				touchDrag: true,    // Explicitly enable on mobile
+				mouseDrag: false    // Disable mouse on mobile
+			},
+			600:{
+				items:1,
+				nav:false,
+				touchDrag: true
+			},
+			1000:{
+				items:1,
+				nav:false,
+				touchDrag: true
 			}
-		});
+		}
+	});
+	
+	$('.carousel-work').owlCarousel({
+		autoplay: true,
+		center: true,
+		loop: true,
+		items:1,
+		margin: 30,
+		stagePadding:0,
+		nav: true,
+		touchDrag: true,
+		mouseDrag: true,
+		pullDrag: false,
+		freeDrag: false,
+		navText: ['<span class="ion-ios-arrow-back">', '<span class="ion-ios-arrow-forward">'],
+		responsive:{
+			0:{
+				items: 1,
+				stagePadding: 0,
+				touchDrag: true,
+				mouseDrag: false
+			},
+			600:{
+				items: 2,
+				stagePadding: 50
+			},
+			1000:{
+				items: 3,
+				stagePadding: 100
+			}
+		}
+	});
 
 	};
 	carousel();

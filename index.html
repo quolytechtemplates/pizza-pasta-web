@@ -29,40 +29,21 @@
     <link rel="stylesheet" href="css/style.css">
 
 <style>
-  /* Basic scroll fix without breaking carousel */
+  /* Enable page scrolling */
   body, html {
     overflow-y: scroll !important;
     overflow-x: hidden !important;
-    height: auto !important;
     -webkit-overflow-scrolling: touch !important;
   }
   
-  body {
-    position: relative !important;
+  /* Allow vertical scroll on carousel */
+  .home-slider {
+    touch-action: pan-y !important;
   }
   
-  /* Keep carousel working but allow vertical scroll */
-  .home-slider.owl-carousel {
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  /* Fix overlay blocking touches */
-  .slider-item .overlay,
-  .ftco-counter .overlay,
-  .ftco-services .overlay {
+  /* Make overlays non-blocking */
+  .overlay {
     pointer-events: none !important;
-  }
-  
-  /* Ensure carousel nav dots and arrows work */
-  .owl-dots,
-  .owl-nav {
-    pointer-events: auto !important;
-  }
-  
-  .owl-dot,
-  .owl-next,
-  .owl-prev {
-    pointer-events: auto !important;
   }
 </style>
   </head>
@@ -746,52 +727,13 @@
     
   </body>
 
-  <!-- SIMPLE CAROUSEL + SCROLL FIX - Add right before closing </body> tag, AFTER main.js -->
-
 <script>
 jQuery(document).ready(function($) {
-  
-  // Force scrolling to work
+  // Ensure body stays scrollable
   $('body, html').css({
-    'overflow': 'auto',
     'overflow-y': 'scroll',
-    'height': 'auto',
-    '-webkit-overflow-scrolling': 'touch'
+    'height': 'auto'
   });
-  
-  // Let the carousel work normally, but fix the touch conflict
-  var carouselElement = $('.home-slider');
-  
-  if (carouselElement.length) {
-    var startY = 0;
-    var currentY = 0;
-    var isDraggingVertically = false;
-    
-    carouselElement.on('touchstart', function(e) {
-      startY = e.touches[0].pageY;
-      isDraggingVertically = false;
-    });
-    
-    carouselElement.on('touchmove', function(e) {
-      currentY = e.touches[0].pageY;
-      var deltaY = Math.abs(currentY - startY);
-      var deltaX = Math.abs(e.touches[0].pageX - e.touches[0].pageX);
-      
-      // If user is scrolling vertically (not swiping carousel)
-      if (deltaY > 15) {
-        isDraggingVertically = true;
-        // Stop the carousel from interfering
-        e.stopPropagation();
-      }
-    });
-    
-    carouselElement.on('touchend', function() {
-      isDraggingVertically = false;
-    });
-  }
-  
-  // Make overlays non-blocking for touch events
-  $('.overlay').css('pointer-events', 'none');
 });
 </script>
 </html>
