@@ -1,7 +1,5 @@
 /*!
  * Bootstrap v4.1.0 (https://getbootstrap.com/)
- * Copyright 2011-2018 The Bootstrap Authors
- * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 :root {
@@ -1620,6 +1618,10 @@ pre {
 select.form-control:not([size]):not([multiple]) {
   height: calc(2.25rem + 2px); }
 
+  .price {
+    background: transparent;
+  }
+
 select.form-control:focus::-ms-value {
   color: #495057;
   background-color: #fff; }
@@ -3193,7 +3195,7 @@ input[type="button"].btn-block {
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
-  background: white; }
+ }
 
 .nav-link {
   display: block;
@@ -7949,15 +7951,13 @@ h1, h2, h3, h4, h5,
       width: calc(100% - 80px);
       font-size: 18px; }
       .pricing-entry .text h3 span {
-        background: #121618;
-        background: url(../images/bg_4.jpg) no-repeat fixed;
+        background: transparent;
         padding-right: 20px; }
     .pricing-entry .text .price {
       width: 80px;
       color: #fac564;
       text-align: right;
-      background: #121618;
-      background: url(../images/bg_4.jpg) no-repeat fixed;
+      background: transparent;
       font-size: 16px; }
 
 @media (max-width: 991.98px) {
@@ -7981,9 +7981,11 @@ h1, h2, h3, h4, h5,
 
 .menu-wrap .text .price {
   font-size: 16px;
-  font-weight: 400; }
+  font-weight: 400;
+  background: transparent;}
   .menu-wrap .text .price span {
-    color: #fac564; }
+    color: #fac564;
+    background: transparent; }
 
 .ftco-appointment {
   width: 100%;
